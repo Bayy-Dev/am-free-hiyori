@@ -1,0 +1,16 @@
+[
+  {
+    "id": "admin-1",
+    "username": "adm",
+    "password": "adm",
+    "role": "admin",
+    "createdAt": 1713499877000
+  },
+  {
+    "id": "mo5ijt1rjaozv7bzjmn",
+    "username": "testuser1",
+    "password": "test",
+    "role": "member",
+    "createdAt": 1776587874255
+  }
+]

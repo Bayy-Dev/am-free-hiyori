@@ -1,0 +1,16 @@
+{
+  "name": "am-claim",
+  "version": "1.0.0",
+  "description": "AM Premium Claim - server dengan penyimpanan JSON",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "userbot": "node userbot.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "telegram": "^2.26.22",
+    "input": "^1.0.1"
+  }
+}

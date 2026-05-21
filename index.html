@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AM Premium Claim</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <div class="app">
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+    <!-- TOPBAR (desktop) -->
+    <div class="topbar">
+      <div class="topbar-logo">
+        <img src="logo.jpg" alt="AM Claim Logo" class="topbar-logo-img">
+        <span>AM Claim</span>
+      </div>
+      <div class="topbar-nav">
+        <button class="nav-btn active" onclick="showPage('dashboard')">Dashboard</button>
+        <button class="nav-btn" id="nav-btn-history" onclick="showPage('history')" style="display:none;">Riwayat Claim</button>
+        <button class="nav-btn" id="nav-btn-admin" onclick="showPage('admin')" style="display:none;">Admin</button>
+      </div>
+      <div class="topbar-user" id="topbar-user"></div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+      <!-- MOBILE HEADER -->
+      <div class="mobile-header">
+        <img src="logo.jpg" alt="AM Claim" class="mobile-logo-img">
+        <div class="mobile-header-text">
+          <div class="logo-text">AM Premium Free</div>
+          <div class="logo-sub">Alight Motion Premium Free by Hiyori Senpaii </div>
+        </div>
+      </div>
+
+      <!-- DASHBOARD PAGE -->
+      <div class="page active" id="page-dashboard">
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-num" id="stat-total">0</div>
+            <div class="stat-label">Total Akun</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="stat-avail">0</div>
+            <div class="stat-label">Tersedia</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="stat-claimed">0</div>
+            <div class="stat-label">Diklaim</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="stat-left">0</div>
+            <div class="stat-label">Sisa Slot</div>
+          </div>
+          <div class="stat-card" id="stat-card-users" style="display:none;">
+            <div class="stat-num" id="stat-users">0</div>
+            <div class="stat-label">Total User</div>
+          </div>
+          <div class="stat-card" id="stat-card-durasi" style="display:none;">
+            <div class="stat-num" id="stat-durasi" style="font-size:18px;letter-spacing:.5px;">-</div>
+            <div class="stat-label">Durasi Akses</div>
+          </div>
+        </div>
+
+        <div id="hero-section"></div>
+
+        <div class="notice">
+          <span class="notice-icon">⚠️</span>
+          <span>Setiap perangkat hanya bisa claim <strong>1x</strong>. Simpan info akun dengan baik setelah
+            diklaim.</span>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Cara Claim</div>
+          <div class="how-to">
+            1. Klik tombol <strong>Claim Sekarang</strong><br>
+            2. Simpan email yang muncul<br>
+            3. Buka link akses email untuk verifikasi<br>
+            4. Login ke Alight Motion pakai akun tersebut<br>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Cara Login</div>
+          <div class="how-to">
+            1. Masuk ke am dan login menggunakan <strong>Email</strong><br>
+            2. Masukan email yg diatas, lalu klik <strong>Berikutnya</strong><br>
+            3. Lalu klik <strong>Buka Akses Email</strong> Diatas<br>
+            4. Login ke Alight Motion pakai akun tersebut<br>
+          </div>
+          <div style="margin-top:14px;border-radius:12px;overflow:hidden;aspect-ratio:9/16;max-width:280px;margin-left:auto;margin-right:auto;">
+            <iframe
+              src="https://www.youtube.com/embed/AXS6wXz7fc0"
+              title="Tutorial Login"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              style="width:100%;height:100%;border-radius:12px;">
+            </iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- HISTORY PAGE -->
+      <div class="page" id="page-history">
+        <div class="history-tab-bar">
+          <button class="history-tab-btn active" data-tab="my" onclick="switchHistoryTab('my')">
+            <span>👤</span> My Claim
+          </button>
+          <button class="history-tab-btn" data-tab="all" onclick="switchHistoryTab('all')">
+            <span>📡</span> Riwayat Claim
+          </button>
+        </div>
+        <div id="htab-my"></div>
+        <div id="htab-all" style="display:none;"></div>
+      </div>
+
+      <!-- ADMIN PAGE -->
+      <div class="page" id="page-admin">
+        <div id="admin-login-section">
+          <div class="admin-login">
+            <div class="admin-icon">🔐</div>
+            <div class="admin-title">Admin Panel</div>
+            <div class="admin-sub">Masukkan password untuk akses admin</div>
+            <div class="input-wrap">
+              <label class="input-label">Password</label>
+              <input type="password" class="input-field" id="admin-pw-input" placeholder="••••••••"
+                onkeydown="if(event.key==='Enter')adminLogin()">
+            </div>
+            <button class="btn-primary" onclick="adminLogin()">Masuk Admin</button>
+            <div class="error-msg" id="admin-error"></div>
+          </div>
+        </div>
+
+        <div id="admin-panel-section" style="display:none;">
+          <div class="admin-header">
+            <div class="admin-section-title">🗂 Admin Panel</div>
+          </div>
+
+          <!-- TAB NAVIGATION -->
+          <div class="admin-tabs">
+            <button class="admin-tab-btn active" data-tab="accounts" onclick="switchAdminTab('accounts')">
+              📋 Akun
+            </button>
+            <button class="admin-tab-btn" data-tab="sessions" onclick="switchAdminTab('sessions')">
+              🖥️ Session
+            </button>
+            <button class="admin-tab-btn" data-tab="users" onclick="switchAdminTab('users')">
+              👥 Kelola User
+            </button>
+            <button class="admin-tab-btn" data-tab="debug" onclick="switchAdminTab('debug')">
+              🛠 Debug
+            </button>
+          </div>
+
+          <!-- TAB: AKUN -->
+          <div id="tab-accounts">
+            <div class="add-account-form">
+              <div class="form-title">+ Tambah Akun Baru</div>
+              <div class="input-wrap">
+                <label class="input-label">Email Akun</label>
+                <input type="email" class="input-field" id="input-email" placeholder="contoh@alightmotion.com">
+              </div>
+              <div class="input-wrap">
+                <label class="input-label">Keterangan</label>
+                <input type="text" class="input-field" id="input-keterangan" placeholder="Misal: Batch 1, valid 1 tahun">
+              </div>
+              <button class="btn-primary" onclick="addAccount()">Tambah Akun</button>
+            </div>
+
+            <div class="list-header">
+              <div class="admin-section-title" style="margin-bottom:0;">Daftar Akun</div>
+              <span class="badge-count" id="admin-count">0</span>
+            </div>
+            <div id="admin-account-list"></div>
+          </div>
+
+          <!-- TAB: SESSION -->
+          <div id="tab-sessions" style="display:none;">
+            <div class="session-info-banner">
+              <span>💡</span>
+              <span>Setiap user yang claim akan punya <strong>Session ID</strong>. Hapus session untuk reset user tersebut agar bisa claim ulang.</span>
+            </div>
+            <div class="list-header">
+              <div class="admin-section-title" style="margin-bottom:0;">Daftar Session Aktif</div>
+              <span class="badge-count" id="session-count">0</span>
+            </div>
+            <div id="session-list"></div>
+          </div>
+
+          <!-- TAB: KELOLA USER -->
+          <div id="tab-users" style="display:none;">
+            <div class="add-account-form" id="add-user-form-wrap">
+              <div class="form-title" id="add-user-form-title">👥 Tambah User</div>
+              <div class="input-wrap">
+                <label class="input-label">Username</label>
+                <input type="text" class="input-field" id="new-user-username" placeholder="Username baru">
+              </div>
+              <div class="input-wrap">
+                <label class="input-label">Password</label>
+                <input type="password" class="input-field" id="new-user-password" placeholder="Minimal 6 karakter">
+              </div>
+              <div class="input-wrap" id="role-wrap" style="display:none;">
+                <label class="input-label">Role</label>
+                <select class="input-field" id="new-user-role" onchange="onRoleChange()">
+                  <option value="admin">👑 Admin</option>
+                  <option value="member">👤 Member</option>
+                </select>
+              </div>
+              <div class="input-wrap" id="admin-durasi-wrap" style="display:none;">
+                <label class="input-label">Durasi Admin</label>
+                <select class="input-field" id="new-user-durasi" onchange="onDurasiChange(this)">
+                  <option value="1">1 Hari</option>
+                  <option value="5">5 Hari</option>
+                  <option value="7">7 Hari</option>
+                  <option value="15">15 Hari</option>
+                  <option value="30">30 Hari</option>
+                  <option value="0">Permanen</option>
+                  <option value="custom">⚙️ Custom...</option>
+                </select>
+                <!-- Custom inline fields -->
+                <div id="custom-durasi-inline" style="display:none;margin-top:10px;display:none;">
+                  <div style="display:flex;gap:8px;">
+                    <input type="number" class="input-field" id="custom-durasi-val" placeholder="Contoh: 30" min="1" style="flex:1;">
+                    <select class="input-field" id="custom-durasi-type" style="flex:1;">
+                      <option value="menit">Menit</option>
+                      <option value="jam">Jam</option>
+                      <option value="hari" selected>Hari</option>
+                    </select>
+                  </div>
+                  <div class="error-msg" id="custom-durasi-error" style="margin-top:6px;"></div>
+                </div>
+              </div>
+              <div class="error-msg" id="add-user-error"></div>
+              <button class="btn-primary" onclick="adminAddUser()">Tambah User</button>
+            </div>
+
+            <div class="list-header">
+              <div class="admin-section-title" style="margin-bottom:0;">Daftar User</div>
+              <span class="badge-count" id="user-count">0</span>
+            </div>
+            <div id="user-list"></div>
+          </div>
+
+          <!-- TAB: DEBUG -->
+          <div id="tab-debug" style="display:none;">
+            <!-- Maintenance toggle (hanya admin-1) -->
+            <div id="maintenance-section" class="add-account-form" style="margin-bottom:16px;display:none;">
+              <div class="form-title">🔧 Mode Maintenance</div>
+              <p style="font-size:12px;color:var(--muted);margin:8px 0 14px;">Kalau ON, user yang buka dashboard akan lihat halaman perbaikan.</p>
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div class="toggle-wrap" id="toggle-maintenance" onclick="adminToggleMaintenance()">
+                  <div class="toggle-knob"></div>
+                </div>
+                <span id="maintenance-label" style="font-size:13px;font-weight:600;color:#ef4444;">OFF</span>
+              </div>
+            </div>
+
+            <!-- Restock via Userbot (hanya admin utama) -->
+            <div id="restock-section" class="add-account-form" style="margin-bottom:16px;display:none;background:linear-gradient(135deg,rgba(139,92,246,.08),rgba(59,130,246,.06));border:1px solid rgba(139,92,246,.25);">
+              <div class="form-title">🔄 Restock Otomatis</div>
+              <p style="font-size:12px;color:var(--muted);margin:8px 0 14px;">Userbot akan klik <b>Ambil 10</b> di @giveawaybyrmzzbot dan otomatis import email ke stok akun.</p>
+              <button id="btn-restock" class="btn-claim" style="width:100%;padding:12px;font-size:14px;background:linear-gradient(135deg,#7c3aed,#4f46e5);" onclick="adminRestock()">🤖 Restock via Bot (10 akun)</button>
+            </div>
+
+            <!-- Restock via File TXT (hanya admin utama) -->
+            <div id="restock-file-section" class="add-account-form" style="margin-bottom:16px;display:none;background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(59,130,246,.06));border:1px solid rgba(16,185,129,.25);">
+              <div class="form-title">📄 Restock via File .txt</div>
+              <p style="font-size:12px;color:var(--muted);margin:8px 0 14px;">Upload file <b>.txt</b> berisi daftar email AM. 1 baris = 1 email. Maks 70 email per file.</p>
+              <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;">
+                <label for="restock-txt-input" style="
+                  flex:1;padding:11px;font-size:13px;text-align:center;cursor:pointer;
+                  background:linear-gradient(135deg,#065f46,#047857);color:#fff;
+                  border:none;border-radius:10px;font-weight:600;
+                ">📂 Pilih File .txt</label>
+                <input type="file" id="restock-txt-input" accept=".txt" style="display:none;" onchange="previewRestockFile(event)">
+                <button id="btn-restock-file" class="btn-claim" style="flex:1;padding:11px;font-size:13px;background:linear-gradient(135deg,#059669,#0d9488);opacity:.5;cursor:not-allowed;" onclick="adminRestockFile()" disabled>⚡ Import Sekarang</button>
+              </div>
+              <div id="restock-file-preview" style="font-size:12px;color:var(--muted);min-height:20px;"></div>
+            </div>
+
+            <!-- Backup Akun (hanya admin utama) -->
+            <div id="backup-section" class="add-account-form" style="margin-bottom:16px;display:none;">
+              <div class="form-title">💾 Backup Akun</div>
+              <p style="font-size:12px;color:var(--muted);margin:8px 0 14px;">Import atau export data akun AM dalam format JSON.</p>
+              <div style="display:flex;gap:10px;">
+                <button class="btn-edit" style="flex:1;padding:11px;font-size:13px;" onclick="adminImportBackup()">📂 Import Backup</button>
+                <button class="btn-edit" style="flex:1;padding:11px;font-size:13px;background:linear-gradient(135deg,#059669,#047857);color:#fff;border:none;" onclick="adminExportBackup()">📥 Export Backup</button>
+              </div>
+              <input type="file" id="backup-file-input" accept=".json" style="display:none;" onchange="handleBackupFile(event)">
+            </div>
+
+            <div id="danger-zone-section" class="add-account-form" style="margin-bottom:16px;">
+              <div class="form-title">⚠️ Danger Zone — Clear All</div>
+              <p style="font-size:12px;color:var(--muted);margin:8px 0 14px;">Hapus semua riwayat claim, akun AM, dan semua user (kecuali admin). DeviceId semua user juga direset.</p>
+              <button class="btn-delete" style="width:100%;padding:12px;font-size:14px;" onclick="adminClearAll()">🗑 Reset Semua Data</button>
+            </div>
+            <div class="list-header">
+              <div class="admin-section-title" style="margin-bottom:0;">Data User & Device</div>
+              <span class="badge-count" id="debug-count">0</span>
+            </div>
+            <div id="debug-user-list"></div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM NAV (mobile) -->
+    <div class="bottom-nav">
+      <button class="nav-item active" id="nav-dashboard" onclick="showPage('dashboard')">
+        <span class="nav-icon">🏠</span>
+        Dashboard
+      </button>
+      <button class="nav-item" id="nav-history" onclick="showPage('history')" style="display:none;">
+        <span class="nav-icon">📋</span>
+        Riwayat
+      </button>
+      <button class="nav-item" id="nav-login-mobile" onclick="showAuthModal()">
+        <span class="nav-icon">👤</span>
+        Masuk
+      </button>
+      <!-- User profile button (shown when logged in) -->
+      <button class="nav-item" id="nav-user-mobile" onclick="toggleMobileUserMenu()" style="display:none;">
+        <span class="nav-icon nav-avatar-mobile" id="nav-avatar-mobile">👤</span>
+        <span id="nav-user-label-mobile">Profil</span>
+      </button>
+      <button class="nav-item" id="nav-admin" onclick="showPage('admin')" style="display:none;">
+        <span class="nav-icon">⚙️</span>
+        Admin
+      </button>
+    </div>
+
+    <!-- MOBILE USER MENU POPUP -->
+    <div class="mobile-user-menu" id="mobile-user-menu" style="display:none;">
+      <div class="mum-header">
+        <div class="mum-avatar" id="mum-avatar">U</div>
+        <div class="mum-info">
+          <div class="mum-username" id="mum-username">User</div>
+          <div class="mum-role" id="mum-role">Member</div>
+        </div>
+        <button class="mum-close" onclick="toggleMobileUserMenu()">✕</button>
+      </div>
+      <div class="mum-actions">
+        <button class="mum-btn mum-btn-logout" onclick="handleLogout(); toggleMobileUserMenu();">🚪 Keluar</button>
+      </div>
+    </div>
+
+    <!-- ══ AUTH MODAL ══ -->
+    <div class="auth-overlay" id="auth-overlay" style="display:none;">
+      <div class="auth-modal">
+        <!-- Close -->
+        <button class="auth-close" onclick="hideAuthModal()">✕</button>
+
+        <!-- Tabs -->
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-tab="login" onclick="switchAuthTab('login')">Masuk</button>
+          <button class="auth-tab" data-tab="register" onclick="switchAuthTab('register')">Daftar</button>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <div id="auth-login-form">
+          <div class="auth-form-title">Selamat Datang! 👋</div>
+          <div class="auth-form-sub">Masuk untuk melanjutkan claim AM Premium</div>
+          <div class="input-wrap">
+            <label class="input-label">Username</label>
+            <input type="text" class="input-field" id="auth-username" placeholder="Username kamu"
+              onkeydown="if(event.key==='Enter')submitLogin()">
+          </div>
+          <div class="input-wrap">
+            <label class="input-label">Password</label>
+            <input type="password" class="input-field" id="auth-password" placeholder="••••••••"
+              onkeydown="if(event.key==='Enter')submitLogin()">
+          </div>
+          <div class="error-msg" id="auth-login-error"></div>
+          <button class="btn-primary" id="btn-submit-login" onclick="submitLogin()" style="margin-top:6px;">Masuk</button>
+          <div class="auth-switch">Belum punya akun? <a onclick="switchAuthTab('register')">Daftar gratis</a></div>
+        </div>
+
+        <!-- REGISTER FORM -->
+        <div id="auth-register-form" style="display:none;">
+          <div class="auth-form-title">Buat Akun Baru 🚀</div>
+          <div class="auth-form-sub">Daftar gratis untuk claim AM Premium</div>
+          <div class="input-wrap">
+            <label class="input-label">Username</label>
+            <input type="text" class="input-field" id="reg-username"
+              placeholder="Min. 3 karakter, huruf/angka/_"
+              onkeydown="if(event.key==='Enter')submitRegister()"
+              oninput="this.classList.remove('input-error'); document.getElementById('auth-register-error').textContent=''">
+          </div>
+          <div class="input-wrap">
+            <label class="input-label">Password</label>
+            <input type="password" class="input-field" id="reg-password" placeholder="Minimal 6 karakter"
+              onkeydown="if(event.key==='Enter')submitRegister()"
+              oninput="this.classList.remove('input-error'); document.getElementById('auth-register-error').textContent=''">
+          </div>
+          <div class="error-msg" id="auth-register-error"></div>
+          <button class="btn-primary" id="btn-submit-register" onclick="submitRegister()" style="margin-top:6px;">Daftar Sekarang</button>
+          <div class="auth-switch">Sudah punya akun? <a onclick="switchAuthTab('login')">Masuk</a></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ EDIT USER MODAL ══ -->
+  <div class="auth-overlay" id="edit-user-overlay" style="display:none;">
+    <div class="auth-modal">
+      <button class="auth-close" onclick="closeEditUserModal()">✕</button>
+
+      <div class="auth-form-title">Edit User ✏️</div>
+      <div class="auth-form-sub" id="edit-user-subtitle">Ubah data user</div>
+      <input type="hidden" id="edit-user-id">
+
+      <div class="input-wrap">
+        <label class="input-label">Username</label>
+        <input type="text" class="input-field" id="edit-user-username" placeholder="Username baru"
+          oninput="this.classList.remove('input-error'); document.getElementById('edit-user-error').textContent=''">
+      </div>
+      <div class="input-wrap">
+        <label class="input-label" style="display:flex;align-items:center;gap:6px;">
+          Password Baru
+          <span style="font-size:10px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;">(kosongkan jika tidak diubah)</span>
+        </label>
+        <input type="password" class="input-field" id="edit-user-password" placeholder="Kosongkan jika tidak diubah"
+          oninput="document.getElementById('edit-user-error').textContent=''">
+      </div>
+      <div class="input-wrap" id="edit-role-wrap">
+        <label class="input-label">Role</label>
+        <select class="input-field" id="edit-user-role">
+          <option value="admin">👑 Admin</option>
+          <option value="member">👤 Member</option>
+        </select>
+      </div>
+
+      <!-- Toggle STATUS & AKSES -->
+      <div style="display:flex;gap:10px;margin-top:14px;">
+        <!-- STATUS -->
+        <div style="flex:1;background:rgba(255,255,255,0.04);border-radius:12px;padding:12px 14px;border:1px solid rgba(255,255,255,0.07);">
+          <div style="font-size:10px;font-weight:700;letter-spacing:.8px;color:var(--muted);margin-bottom:8px;">STATUS</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span id="edit-status-label" style="font-size:12px;font-weight:600;">Nonaktif</span>
+            <div class="toggle-wrap" id="toggle-status" onclick="toggleEditSwitch('status')">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+        </div>
+        <!-- AKSES -->
+        <div style="flex:1;background:rgba(255,255,255,0.04);border-radius:12px;padding:12px 14px;border:1px solid rgba(255,255,255,0.07);">
+          <div style="font-size:10px;font-weight:700;letter-spacing:.8px;color:var(--muted);margin-bottom:8px;">AKSES</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span id="edit-akses-label" style="font-size:12px;font-weight:600;">1x Claim</span>
+            <div class="toggle-wrap" id="toggle-akses" onclick="toggleEditSwitch('akses')">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="error-msg" id="edit-user-error"></div>
+
+      <!-- Durasi / Expired -->
+      <div class="input-wrap" id="edit-expired-wrap" style="margin-top:14px;">
+        <label class="input-label">⏳ Durasi Akses</label>
+        <select class="input-field" id="edit-user-expired" onchange="onEditDurasiChange(this)">
+          <option value="0">♾ Permanen</option>
+          <option value="1">1 Hari</option>
+          <option value="7">7 Hari</option>
+          <option value="10">10 Hari</option>
+          <option value="20">20 Hari</option>
+          <option value="30">30 Hari</option>
+          <option value="custom">⚙ Custom...</option>
+        </select>
+        <!-- Custom input (muncul kalau pilih Custom) -->
+        <div id="edit-custom-durasi-wrap" style="display:none;margin-top:10px;">
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input type="number" class="input-field" id="edit-custom-durasi-val" placeholder="Contoh: 30" min="1" style="flex:1;">
+            <select class="input-field" id="edit-custom-durasi-type" style="flex:1;">
+              <option value="days">Hari</option>
+              <option value="hours">Jam</option>
+              <option value="minutes">Menit</option>
+            </select>
+          </div>
+          <div class="error-msg" id="edit-custom-durasi-error" style="margin-top:6px;"></div>
+        </div>
+        <div id="edit-expired-info" style="font-size:11px;color:var(--muted);margin-top:6px;"></div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:8px;">
+        <button class="btn-primary" id="btn-save-edit-user" onclick="adminSaveEditUser()">Simpan Perubahan</button>
+        <button class="btn-secondary" onclick="closeEditUserModal()">Batal</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- FLOATING WA BUTTON -->
+  <a href="https://wa.me/+6283894641570" target="_blank" rel="noopener" class="wa-float" title="Hubungi Admin via WhatsApp">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="white" width="28" height="28">
+      <path d="M16 0C7.163 0 0 7.163 0 16c0 2.824.738 5.476 2.027 7.785L0 32l8.437-2.01A15.934 15.934 0 0 0 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333a13.27 13.27 0 0 1-6.771-1.854l-.485-.29-5.01 1.194 1.238-4.874-.317-.5A13.267 13.267 0 0 1 2.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333zm7.27-9.87c-.398-.199-2.355-1.162-2.72-1.294-.366-.133-.632-.199-.898.199-.266.398-1.03 1.294-1.263 1.56-.232.265-.465.298-.863.1-.398-.2-1.681-.62-3.202-1.977-1.183-1.056-1.982-2.36-2.214-2.758-.232-.398-.025-.613.174-.811.179-.178.398-.465.597-.697.199-.232.265-.398.398-.664.133-.265.067-.498-.033-.697-.1-.199-.898-2.165-1.23-2.963-.324-.778-.654-.672-.898-.685l-.765-.013c-.266 0-.698.1-.064 1.063-.332.398-1.263 1.529-1.263 3.729 0 2.2 1.296 4.328 1.477 4.627.18.298 2.552 3.896 6.185 5.461.865.373 1.54.596 2.066.763.868.276 1.659.237 2.284.144.697-.104 2.355-.963 2.688-1.893.333-.93.333-1.727.233-1.893-.1-.166-.366-.265-.764-.464z"/>
+    </svg>
+    <span class="wa-float-tooltip">Ada kendala? Chat Admin</span>
+  </a>
+
+  <style>
+    .wa-float {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 52px;
+      height: 52px;
+      background: #25D366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.45);
+      z-index: 999;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: wa-pulse 2.5s infinite;
+    }
+    .wa-float:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 28px rgba(37, 211, 102, 0.6);
+    }
+    .wa-float:hover .wa-float-tooltip {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+    .wa-float-tooltip {
+      position: absolute;
+      right: 60px;
+      background: rgba(18, 18, 26, 0.95);
+      color: #e8e8f0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 7px 12px;
+      border-radius: 8px;
+      white-space: nowrap;
+      border: 1px solid rgba(255,255,255,0.08);
+      opacity: 0;
+      transform: translateX(6px);
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+    }
+    .wa-float-tooltip::after {
+      content: '';
+      position: absolute;
+      right: -5px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 5px solid transparent;
+      border-right: none;
+      border-left-color: rgba(18, 18, 26, 0.95);
+    }
+    @keyframes wa-pulse {
+      0%, 100% { box-shadow: 0 4px 20px rgba(37,211,102,0.45); }
+      50%       { box-shadow: 0 4px 32px rgba(37,211,102,0.75); }
+    }
+    /* Desktop: posisi lebih ke bawah karena ga ada bottom nav */
+    @media (min-width: 720px) {
+      .wa-float { bottom: 28px; right: 28px; width: 56px; height: 56px; }
+    }
+  </style>
+
+</body>
+
+</html>
